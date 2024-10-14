@@ -7,10 +7,11 @@ do {
     Write-Host "1: Affiche la version de Windows"
     Write-Host "2: Nombre de processus"
     Write-Host "3: Affiche l'utilisation de la mémoire RAM"
-    Write-Host "4: Quitter"
+    Write-Host "4: Affiche le processeur de la machine"
+    Write-Host "5: Quitter"
     Write-Host "==============================="
 
-    $choice = Read-Host "Sélectionnez une option (1-4)"
+    $choice = Read-Host "Sélectionnez une option (1-5)"
 
     switch ($choice)
     {
@@ -33,18 +34,31 @@ do {
             Write-Host "Mémoire utilisée: $usedMem GB"
             Write-Host "Mémoire disponible: $freeMem GB"
         }
+
+        4 {
+            # Obtenir les informations sur le processeur
+            $cpuInfo = Get-WmiObject Win32_Processor
+            $cpuName = $cpuInfo.Name
+            $cpuCores = $cpuInfo.NumberOfCores
+            $cpuMaxSpeed = [math]::Round($cpuInfo.MaxClockSpeed / 1000, 2)  # Convertir MHz en GHz
+
+            Write-Host "Processeur de la machine:"
+            Write-Host "Nom du processeur: $cpuName"
+            Write-Host "Nombre de cœurs: $cpuCores"
+            Write-Host "Vitesse maximale: $cpuMaxSpeed GHz"
+        }
 		
-        4 { Write-Host "En train de quitter ..." }
+        5 { Write-Host "En train de quitter ..." }
 		
         default { Write-Host "Sélection invalide" }
     }
 
     # Demande à l'utilisateur d'appuyer sur une touche pour continuer
-    if ($choice -ne 4) {
+    if ($choice -ne 5) {
         Write-Host ""
         Read-Host "Appuyez sur Entrée pour continuer..."
     }
 
     Clear-Host
 
-} while ($choice -ne 4)  # Continue la boucle tant que l'option 4 n'est pas choisie
+} while ($choice -ne 5)  # Continue la boucle tant que l'option 5 n'est pas choisie
